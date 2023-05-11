@@ -1,17 +1,19 @@
 import css from './ImageGalleryItem.module.css';
 import PropTypes from "prop-types";
-const { Component } = require("react");
+import React from 'react';
 
-class ImageGalleryItem extends Component {
-       
-    render() {
-        return (
-            <li onClick={() => this.props.onOpen(this.props.href)}  className={css.imageGalleryItem}>
-                <img src={this.props.src} onClick={this.props.onClick} alt={this.props.alt} className={css['imageGalleryItem-image']} />
-            </li>  
-    )
+function ImageGalleryItem(props) {
+    const handleClick = () => {
+        props.onOpen(props.href);
+    };
+
+    return (
+        <li onClick={handleClick} className={css.imageGalleryItem}>
+            <img src={props.src} alt={props.alt} className={css['imageGalleryItem-image']} />
+        </li>
+    );
 }
-}
+
 export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {

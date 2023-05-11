@@ -1,58 +1,50 @@
 import css from './ImageGallery.module.css';
 import PropTypes from "prop-types";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
-const { Component } = require("react");
+import React, { useState, useEffect } from 'react';
 
-class ImageGallrey extends Component {
-    state = {
-        scrollPosition: 0
+function ImageGallery(props) {
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+        useEffect(() => {
+            window.addEventListener("scroll", handleScroll);
+            return () => {
+                window.removeEventListener("scroll", handleScroll);
+            };
+        }, []);
+
+        useEffect(() => {
+            if (scrollPosition !== 0) {
+                window.scrollTo(0, scrollPosition);
+            }
+        }, [scrollPosition]);
+
+        const handleScroll = () => {
+            setScrollPosition(window.pageYOffset);
+        };
+
+        return (
+            <ul className={css.imageGallery}>
+                {props.pictures &&
+                    props.pictures.map((i) => (
+                        <ImageGalleryItem
+                            key={i.id}
+                            src={i.webformatURL}
+                            href={i.largeImageURL}
+                            alt={i.tags}
+                            onOpen={props.onOpen}
+                        />
+                    ))}
+            </ul>
+        );
     };
 
-    componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll);
+    export default ImageGallery;
+
+    ImageGallery.propTypes = {
+        pictures: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number.isRequired,
+            })
+        ).isRequired,
     }
-
-    componentWillUnmount() {
-        window.removeEventListener("scroll", this.handleScroll);
-    }
-
-    handleScroll = () => {
-        this.setState({
-            scrollPosition: window.pageYOffset
-        });
-    };
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.scrollPosition !== this.state.scrollPosition) {
-            window.scrollTo(0, this.state.scrollPosition);
-        }
-    }
-
-    render() {
-                return (
-                        <ul className={css.imageGallery}>
-                        {this.props.pictures &&
-                            this.props.pictures.map((i) => (
-                                <ImageGalleryItem
-                                    key={i.id}
-                                    src={i.webformatURL}
-                                    href={i.largeImageURL}
-                                    alt={i.tags}
-                                    onOpen={this.props.onOpen}
-                                />
-                            ))}
-                        </ul>
-                );
-            }   
-        }
-
-export default ImageGallrey;
-
-ImageGallrey.propTypes = {
-
-    pictures: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-        })
-    ).isRequired,
-};

@@ -1,21 +1,17 @@
 import css from './Button.module.css';
 import PropTypes from "prop-types";
-const { Component } = require("react");
+import React from 'react';
 
-class Button extends Component {
-
-    render() {
-        return (
-            <button onClick={this.props.onLoadMore} className={css.button}>
-                Load more
-            </button>
-        )
-    }
-
-
+function Button(props) {
+    return (
+        <button onClick={props.onLoadMore} className={css.button}>
+            Load more
+        </button>
+    );
 }
-export default Button;
 
 Button.propTypes = {
     onLoadMore: PropTypes.func.isRequired,
 };
+
+export default Button;
